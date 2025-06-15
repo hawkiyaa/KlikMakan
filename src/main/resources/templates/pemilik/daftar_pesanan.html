@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Daftar Pesanan</title>
+    <link rel="stylesheet" th:href="@{/css/navbarpemilik.css}" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            color: #374151;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #4b5563;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: #e5e7eb;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #d1d5db;
+        }
+
+        th {
+            color: #374151;
+            font-weight: 600;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+
+        .badge {
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge.MENUNGGU { background-color: #f59e0b; color: #fff; }
+        .badge.DIBATALKAN { background-color: #ef4444; color: #fff; }
+        .badge.DITOLAK { background-color: #991b1b; color: #fff; }
+        .badge.DIPROSES { background-color: #3b82f6; color: #fff; }
+        .badge.DIKIRIM { background-color: #8b5cf6; color: #fff; }
+        .badge.SELESAI { background-color: #10b981; color: #fff; }
+
+        select, button {
+            padding: 8px 12px;
+            font-size: 0.9em;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            background-color: #f9fafb;
+            color: #374151;
+            margin-right: 6px;
+        }
+
+        button {
+            background-color: #6b7280;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #4b5563;
+        }
+
+        select:disabled,
+        button:disabled {
+            background-color: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<header th:replace="~{pemilik/navbar :: navbar}"></header>
+
+<div class="container">
+    <h2>Daftar Pesanan</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Pembeli</th>
+                <th>Alamat</th>
+                <th>Total</th>
+                <th>Pembayaran</th>
+                <th>Status</th>
+                <th>Ubah Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="trx : ${transactions}">
+                <td th:text="${trx.userId}">Pembeli</td>
+                <td th:text="${trx.shippingAddress}">Alamat</td>
+                <td th:text="${#numbers.formatDecimal(trx.totalPrice, 1, 'COMMA', 2, 'POINT')}">0.00</td>
+                <td th:text="${trx.paymentMethod}">COD</td>
+                <td><span th:text="${trx.status}" th:class="'badge ' + ${trx.status}">MENUNGGU</span></td>
+                <td>
+                    <form th:action="@{/pemilik/daftar_pesanan/ubah_status}" method="post">
+                        <input type="hidden" name="id" th:value="${trx.id}" />
+                        <select name="status" th:disabled="${trx.status == 'DIBATALKAN' || trx.status == 'SELESAI'}">
+                            <option value="MENUNGGU" th:selected="${trx.status.name() == 'MENUNGGU'}">MENUNGGU</option>
+                            <option value="DITOLAK" th:selected="${trx.status.name() == 'DITOLAK'}">DITOLAK</option>
+                            <option value="DIPROSES" th:selected="${trx.status.name() == 'DIPROSES'}">DIPROSES</option>
+                            <option value="DIKIRIM" th:selected="${trx.status.name() == 'DIKIRIM'}">DIKIRIM</option>
+                            <option value="SELESAI" th:selected="${trx.status.name() == 'SELESAI'}">SELESAI</option>
+                        </select>
+                        <button type="submit" th:disabled="${trx.status == 'DIBATALKAN' || trx.status == 'SELESAI'}">Terapkan</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

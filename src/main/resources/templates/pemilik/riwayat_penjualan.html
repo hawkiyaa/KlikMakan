@@ -1,0 +1,76 @@
+<!-- templates/pemilik/penjualan-mingguan.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Riwayat Penjualan</title>
+    <link rel="stylesheet" th:href="@{/css/navbarpemilik.css}">
+    <style>
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 20px 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 12px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f6f8;
+            color: #333;
+            border-bottom: 2px solid #ccc;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #eef2f7;
+        }
+
+        td {
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="~{pemilik/navbar :: navbar}"></header>
+
+    <div class="container">
+        <h2>Riwayat Penjualan Produk</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Produk</th>
+                    <th>Jumlah Terjual</th>
+                    <th>Total Pendapatan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="sale : ${weeklySales}">
+                    <td th:text="${sale.productName}">Nama Produk</td>
+                    <td th:text="${sale.totalQuantity}">10</td>
+                    <td th:text="'Rp ' + ${#numbers.formatDecimal(sale.totalRevenue, 0, 'COMMA', 2, 'POINT')}">Rp0,00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Status Pengiriman</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/css/navbarpembeli.css}">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fff8f2;
+      margin: 0;
+      padding: 0;
+      color: #4a4a4a;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 30px 0 20px;
+      font-weight: 700;
+      color: #e64a19;
+    }
+
+    .status-container {
+      width: 90%;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .status-card {
+      background-color: #fff3e0;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 16px #e64a19;;
+      transition: transform 0.2s ease;
+    }
+
+    .status-card:hover {
+      transform: scale(1.01);
+    }
+
+    .status-header {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 12px;
+      color: #d84315;
+    }
+
+    .status-detail {
+      margin: 8px 0;
+      color: #e64a19;;
+    }
+
+    .status-detail strong {
+      color: #bf360c;
+    }
+
+    .item-list {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+
+    .item-list li {
+      margin: 6px 0;
+    }
+
+    a.back-link {
+      display: block;
+      text-align: center;
+      margin: 40px 0 20px;
+      color: #ff7043;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: color 0.2s ease;
+    }
+
+    a.back-link:hover {
+      color: #e64a19;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header th:replace="~{pembeli/navbar :: navbar}"></header>
+
+  <h1>Status Pengiriman</h1>
+
+  <div class="status-container">
+    <div th:each="trx : ${transaksiList}" class="status-card">
+      <div class="status-header">
+        Pesanan pada <span th:text="${#temporals.format(trx.createdAt, 'dd-MM-yyyy HH:mm')}">tanggal</span>
+      </div>
+
+      <div class="status-detail">Total Harga: <strong th:text="${trx.totalPrice}">0</strong></div>
+      <div class="status-detail">Metode Pembayaran: <strong th:text="${trx.paymentMethod}">-</strong></div>
+      <div class="status-detail">Status: <strong th:text="${trx.status}">-</strong></div>
+      <div class="status-detail">Alamat Pengiriman: <span th:text="${trx.shippingAddress}">-</span></div>
+
+      <div class="status-detail"><strong>Detail Barang:</strong></div>
+      <ul class="item-list">
+        <li th:each="item : ${trx.items}">
+          <span th:text="${item.product.name}">Nama Produk</span> x 
+          <span th:text="${item.quantity}">0</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</body>
+</html>

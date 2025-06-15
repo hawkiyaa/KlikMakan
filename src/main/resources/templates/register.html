@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registrasi KlikMakan</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        /* Styling khusus untuk dropdown role */
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: #f8f8f8;
+            font-size: 1em;
+            color: #333;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus {
+            border-color: #4CAF50;
+            outline: none;
+            background-color: #fff;
+        }
+
+        select option {
+            padding: 8px;
+            background-color: #fff;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-section">
+        <h1>Gabung dengan <span class="brand">KlikMakan</span></h1>
+    </div>
+
+    <div class="auth-container">
+        <h2>Form Registrasi</h2>
+
+        <form th:action="@{/register}" method="post" th:object="${user}">
+            <input type="text" th:field="*{username}" placeholder="Username" required />
+            <input type="password" th:field="*{password}" placeholder="Password" required />
+            <input type="text" th:field="*{fullName}" placeholder="Nama Lengkap" />
+            <input type="text" th:field="*{address}" placeholder="Alamat" />
+            <input type="text" th:field="*{phone}" placeholder="No HP" />
+
+            <!-- Dropdown role yang sudah dipercantik -->
+            <select th:field="*{role}" required>
+                <option value="" disabled selected>Pilih Peran</option>
+                <option value="USER">Pembeli</option>
+                <option value="ADMIN">Pemilik Warung</option>
+            </select>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <div th:if="${error}" class="error-message" th:text="${error}"></div>
+
+        <p>Sudah punya akun? <a th:href="@{/login}">Login di sini</a></p>
+    </div>
+
+    <footer>
+        &copy; 2025 KlikMakan. All rights reserved.
+    </footer>
+</body>
+</html>

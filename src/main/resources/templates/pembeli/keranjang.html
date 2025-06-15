@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Keranjang Belanja</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" th:href="@{/css/navbarpembeli.css}">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fff3e0;
+      margin: 0;
+      padding: 0;
+      color: #4a4a4a;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 40px 0 30px;
+      font-weight: 700;
+      color: #e64a19;
+      font-size: 2.3rem;
+    }
+
+    .cart-container {
+      max-width: 960px;
+      width: 90%;
+      margin: 0 auto 60px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+      border-radius: 14px;
+      padding: 20px 26px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .product-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex: 1 1 300px;
+      min-width: 220px;
+    }
+
+    .product-info img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 12px;
+      background-color: #ffebd6;
+      padding: 6px;
+      box-shadow: inset 0 0 6px #ffe0b2;
+    }
+
+    .product-info strong {
+      font-size: 1.1rem;
+      color: #ff7043;
+    }
+
+    .product-info span {
+      font-weight: 600;
+      color: #6d6d6d;
+    }
+
+    .price-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      min-width: 140px;
+      flex: 0 0 auto;
+    }
+
+    .price-info span.prices-row {
+      display: flex;
+      gap: 16px;
+      font-weight: 600;
+      color: #374151;
+      font-size: 0.95rem;
+    }
+
+    .price-info span.total-price {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-top: 8px;
+      color: #e64a19;
+    }
+
+    .actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      background-color: #ff7043;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      font-size: 0.85rem;
+    }
+
+    .actions button:hover {
+      background-color: #e64a19;
+    }
+
+    .summary {
+      text-align: right;
+      margin-top: 40px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #e64a19;
+      display: flex;
+      justify-content: flex-end;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .summary p {
+      margin: 8px 0;
+    }
+
+    .checkout-wrapper {
+      max-width: 960px;
+      margin: 20px auto 80px;
+      text-align: right;
+    }
+
+    .checkout-btn {
+      font-size: 1rem;
+      padding: 10px 24px;
+      background-color: #ff7043;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      min-width: 140px;
+      box-shadow: 0 4px 12px rgba(255, 112, 67, 0.3);
+    }
+
+    .checkout-btn:hover {
+      background-color: #d84315;
+    }
+
+    .empty-cart {
+      text-align: center;
+      margin-top: 100px;
+      color: #b0b0b0;
+      font-size: 1.15rem;
+    }
+
+    .empty-cart a {
+      color: #ff7043;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .empty-cart a:hover {
+      text-decoration: underline;
+      color: #e64a19;
+    }
+
+    @media (max-width: 640px) {
+      .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .price-info {
+        align-items: flex-start;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .price-info span.prices-row {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .summary {
+      text-align: right;
+      margin-top: 40px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: flex-end;
+      gap: 40px;
+      flex-wrap: wrap;
+      color: #ff7043; /* label oranye terang */
+    }
+
+    .summary p {
+      margin: 8px 0;
+    }
+
+    .summary span {
+      font-weight: 700;
+      color: #e64a19; /* angka oranye gelap */
+    }
+
+
+      .checkout-wrapper {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header th:replace="~{pembeli/navbar :: navbar}"></header>
+
+  <h1>Keranjang Belanja</h1>
+
+  <div class="cart-container" th:if="${totalItem > 0}">
+    <div class="cart-item" th:each="entry : ${items}">
+      <div class="product-info">
+        <img th:src="@{${entry.key.imageUrl}}" alt="Gambar Produk" />
+        <div>
+          <strong th:text="${entry.key.name}">Nama Produk</strong><br />
+          <span>Qty: <span th:text="${entry.value}">0</span></span>
+        </div>
+      </div>
+      <div class="price-info">
+        <span class="prices-row">
+          <span>Harga: Rp <span th:text="${#numbers.formatDecimal(entry.key.price,0,'COMMA',2,'POINT')}">0</span></span>
+          <span>Total: Rp <span th:text="${#numbers.formatDecimal(entry.key.price * entry.value,0,'COMMA',2,'POINT')}">0</span></span>
+        </span>
+        <div class="actions">
+          <form th:action="@{/keranjang/kurangi}" method="post">
+            <input type="hidden" name="productId" th:value="${entry.key.id}" />
+            <button type="submit" title="Kurangi jumlah">-</button>
+          </form>
+          <form th:action="@{/keranjang/hapus}" method="post">
+            <input type="hidden" name="productId" th:value="${entry.key.id}" />
+            <button type="submit" title="Hapus produk">Hapus</button>
+          </form>
+          <form th:action="@{/keranjang/tambah}" method="post">
+            <input type="hidden" name="productId" th:value="${entry.key.id}" />
+            <button type="submit" title="Tambah jumlah">+</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary">
+      <p>Total Item: <span th:text="${totalItem}">0</span></p>
+      <p>Total Harga: Rp <span th:text="${#numbers.formatDecimal(totalHarga,0,'COMMA',2,'POINT')}">0</span></p>
+    </div>
+
+    <div class="checkout-wrapper">
+      <form th:action="@{/pembeli/checkout}" method="get">
+        <button type="submit" class="checkout-btn">Checkout</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="empty-cart" th:unless="${totalItem > 0}">
+    <p>Keranjang kosong. <a th:href="@{/pembeli/dashboard}">Belanja sekarang</a></p>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Navbar Pembeli</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" th:href="@{/css/navbar.css}" />
+</head>
+<body>
+
+<nav th:fragment="navbar">
+    <div class="logo">
+        <span><i class="fas fa-shopping-cart"></i></span> 
+        <span>KlikMakan</span>
+    </div>
+
+    <div class="nav-toggle" onclick="toggleMenu()" aria-label="Toggle navigation menu" role="button" tabindex="0">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+        <a th:href="@{/pembeli/dashboard}"><i class="fas fa-house"></i> Beranda</a>
+        <a th:href="@{/keranjang}"><i class="fas fa-cart-shopping"></i> Keranjang</a>
+
+        <a th:href="@{/pembeli/status}"><i class="fas fa-clock-rotate-left"></i> Riwayat & Status Pesanan</a>
+        <a th:href="@{/pembeli/profil}"><i class="fas fa-user"></i> Profil</a>
+        <a th:href="@{/login}" class="logout"><i class="fas fa-right-from-bracket"></i> Logout</a>
+    </div>
+</nav>
+
+<footer>
+    &copy; 2025 KlikMakan. Semua hak cipta dilindungi.
+</footer>
+
+<script>
+    function toggleMenu() {
+        const navLinks = document.getElementById('navLinks');
+        navLinks.classList.toggle('active');
+    }
+    document.querySelector('.nav-toggle').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleMenu();
+        }
+    });
+</script>
+
+</body>
+</html>

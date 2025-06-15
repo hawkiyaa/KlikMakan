@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Navbar Pemilik</title>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" th:href="@{/css/navbarpemilik.css}" />
+</head>
+<body>
+
+<!-- Sticky Navbar -->
+<nav class="navbar-pemilik" th:fragment="navbar">
+    <div class="logo">
+        <i class="fas fa-store"></i>
+        <span>Pemilik Warung</span>
+    </div>
+
+    <div class="nav-toggle" onclick="toggleMenu()" aria-label="Toggle navigation menu" role="button" tabindex="0">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+        <a th:href="@{/pemilik/kelola_produk}">
+            <i class="fas fa-box-open"></i> Kelola Produk
+        </a>
+        <a th:href="@{/pemilik/daftar_pesanan}">
+            <i class="fas fa-clipboard-list"></i> Daftar Pesanan
+        </a>
+        <a th:href="@{/pemilik/riwayat_penjualan}">
+            <i class="fas fa-chart-line"></i> Riwayat Penjualan
+        </a>
+        <a th:href="@{/pemilik/profil}">
+            <i class="fas fa-user-cog"></i> Profil
+        </a>
+        <a th:href="@{/login}" class="logout">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+</nav>
+
+<script>
+    function toggleMenu() {
+        const navLinks = document.getElementById('navLinks');
+        navLinks.classList.toggle('active');
+    }
+
+    document.querySelector('.nav-toggle').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleMenu();
+        }
+    });
+</script>
+
+</body>
+</html>

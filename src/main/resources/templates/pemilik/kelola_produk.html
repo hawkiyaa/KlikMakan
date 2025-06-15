@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <title>Kelola Produk</title>
+    <link rel="stylesheet" th:href="@{/css/navbarpemilik.css}" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 80px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        td:first-child {
+            font-weight: bold;
+            color: #374151; /* abu tua */
+        }
+
+
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #4b5563;
+        }
+
+        .actions {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .actions button {
+            background-color: #6b7280;
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .actions button:hover {
+            background-color: #4b5563;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #e5e7eb;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid #d1d5db;
+        }
+
+        td img {
+            max-width: 60px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .btn-ubah,
+        .btn-hapus {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .btn-ubah {
+            background-color: #60a5fa;
+            color: #fff;
+        }
+
+        .btn-hapus {
+            background-color: #ef4444;
+            color: #fff;
+        }
+
+        dialog {
+            border: none;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        dialog form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        dialog input[type="text"],
+        dialog input[type="number"],
+        dialog input[type="file"] {
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+
+        dialog button[type="submit"],
+        dialog button[type="button"] {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        dialog button[type="submit"] {
+            background-color: #10b981;
+            color: white;
+        }
+
+        dialog button[type="button"] {
+            background-color: #9ca3af;
+            color: white;
+        }
+
+        #previewImage {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<header th:replace="~{pemilik/navbar :: navbar}"></header>
+
+<div class="container">
+    <h2>Kelola Produk</h2>
+
+    <div class="actions">
+        <button onclick="showTambahDialog()">Tambah Produk</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Gambar</th>
+                <th>Nama</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${products}">
+                <td th:text="${p.id}">ID</td>
+                <td><img th:src="@{${p.imageUrl}}" alt="Gambar"/></td>
+                <td th:text="${p.name}">Nama</td>
+                <td th:text="${#numbers.formatDecimal(p.price, 1, 'COMMA', 2, 'POINT')}">0.00</td>
+                <td th:text="${p.stock}">0</td>
+                <td>
+                    <button class="btn-ubah" onclick="showUbahDialog(this)">Ubah</button>
+                    <form th:action="@{'/pemilik/kelola_produk/hapus/' + ${p.id}}" method="post" style="display:inline;">
+                        <button type="submit" class="btn-hapus" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Tambah/Ubah Produk -->
+<dialog id="formDialog">
+    <form th:action="@{/pemilik/kelola_produk/simpan}" method="post" enctype="multipart/form-data" th:object="${product}">
+        <h3 id="formTitle">Tambah Produk</h3>
+        <input type="text" th:field="*{id}" id="inputId" placeholder="ID Produk" required/>
+        <input type="text" th:field="*{name}" id="inputNama" placeholder="Nama Produk" required/>
+        <input type="number" step="0.01" th:field="*{price}" id="inputHarga" placeholder="Harga" required/>
+        <input type="number" th:field="*{stock}" id="inputStok" placeholder="Stok" required/>
+        <input type="file" name="image" id="inputGambar" accept="image/*" />
+        <img id="previewImage" style="display:none;" alt="Preview Gambar"/>
+        <button type="submit">Simpan</button>
+        <button type="button" onclick="closeDialog()">Batal</button>
+    </form>
+</dialog>
+
+<script>
+    const dialog = document.getElementById("formDialog");
+    const form = document.querySelector("#formDialog form");
+    const title = document.getElementById("formTitle");
+    const inputId = document.getElementById("inputId");
+    const inputNama = document.getElementById("inputNama");
+    const inputHarga = document.getElementById("inputHarga");
+    const inputStok = document.getElementById("inputStok");
+    const inputGambar = document.getElementById("inputGambar");
+    const previewImage = document.getElementById("previewImage");
+
+    inputGambar.addEventListener('change', function() {
+        const file = this.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = e => {
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewImage.style.display = 'none';
+            previewImage.src = "";
+        }
+    });
+
+    function showTambahDialog() {
+        title.innerText = "Tambah Produk";
+        form.action = "/pemilik/kelola_produk/simpan";
+        inputId.value = "";
+        inputNama.value = "";
+        inputHarga.value = "";
+        inputStok.value = "";
+        inputGambar.value = "";
+        previewImage.style.display = 'none';
+        previewImage.src = "";
+        dialog.showModal();
+    }
+
+    function showUbahDialog(button) {
+        const row = button.closest("tr");
+        const nama = row.cells[1].innerText.trim();
+        const hargaText = row.cells[2].innerText.replace(",", "").trim();
+        const harga = parseFloat(hargaText);
+        const stok = row.cells[3].innerText.trim();
+        const formHapus = row.querySelector('form');
+        const actionUrl = formHapus.getAttribute('action');
+        const idProduk = actionUrl.substring(actionUrl.lastIndexOf('/') + 1);
+
+        title.innerText = "Ubah Produk";
+        form.action = "/pemilik/kelola_produk/simpan";
+        inputId.value = idProduk;
+        inputNama.value = nama;
+        inputHarga.value = harga;
+        inputStok.value = stok;
+        inputGambar.value = "";
+        previewImage.style.display = 'none';
+        previewImage.src = "";
+        dialog.showModal();
+    }
+
+    function closeDialog() {
+        dialog.close();
+    }
+</script>
+
+</body>
+</html>

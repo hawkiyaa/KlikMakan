@@ -1,0 +1,155 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    background: url('/image/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+body {
+    flex: 1 0 auto; /* grow but don’t shrink below content */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar styles */
+nav {
+    background-color: #6c757d; /* abu medium */
+    color: #e0e0e0;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    flex-shrink: 0; /* jangan kecilkan navbar */
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    user-select: none;
+}
+
+.logo span:first-child {
+    font-size: 1.6rem;
+}
+
+/* Hamburger toggle button */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.nav-toggle span {
+    height: 3px;
+    width: 25px;
+    background: white;
+    margin: 4px 0;
+    border-radius: 3px;
+}
+
+/* Nav links desktop */
+.nav-links {
+    display: flex;
+    gap: 1.8rem;
+    align-items: center;
+}
+
+.nav-links a {
+    color: #d0d0d0;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1rem;
+}
+
+.nav-links a:hover {
+    background-color: #5a6268;
+    color: white;
+    text-decoration: none;
+}
+
+.logout {
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border: 1.5px solid #d9534f;
+    color: #d9534f;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.logout:hover {
+    background-color: #d9534f;
+    color: white;
+    text-decoration: none;
+}
+
+/* Container jika ada konten lain nanti */
+/* .container {
+    padding: 2rem;
+    flex-grow: 1;
+} */
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: flex;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        display: none;
+        margin-top: 1rem;
+        background-color: #6c757d;
+        border-radius: 6px;
+        padding: 0.5rem 0;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links a {
+        padding: 12px 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .logout {
+        width: 90%;
+        margin: 0.5rem auto;
+        text-align: center;
+        display: block;
+    }
+}
+
+/* Footer fixed di bawah dengan gaya satu tone */
+footer {
+    background-color: #5a6268; /* sedikti lebih gelap dari navbar */
+    color: #e0e0e0;
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    /* Buat footer selalu di bawah */
+    margin-top: auto;
+    width: 100%;
+}

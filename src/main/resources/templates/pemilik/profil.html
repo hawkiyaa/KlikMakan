@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profil Saya</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS eksternal -->
+    <link rel="stylesheet" th:href="@{/css/navbarpemilik.css}">
+
+    <!-- Style tambahan -->
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f1f3f5;
+            color: #333;
+            margin: 20;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 80px;
+            width: 30%;
+            max-width: 900px;
+            margin: 30px auto;
+            margin-bottom: 80;
+            background-color: #ffffff;
+            padding: 50px;
+            border-radius: 18px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #444;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            background-color: #f7f7f7;
+            color: #333;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #888;
+            background-color: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .form-button-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 22px;
+            background-color: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #4b5563;
+        }
+
+        .alert-success,
+        .alert-error {
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 30px 15px;
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header th:replace="~{pemilik/navbar :: navbar}"></header>
+
+<div class="container">
+    <h2>Profil Saya</h2>
+
+    <!-- Notifikasi -->
+    <div th:if="${success}" class="alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert-error" th:text="${error}"></div>
+
+    <form method="post" action="/profil">
+        <label>Username:</label>
+        <input type="text" name="username" th:value="${user.username}" readonly />
+
+        <label>Password:</label>
+        <input type="password" name="password" th:value="${user.password}" required />
+
+        <label>Nama Lengkap:</label>
+        <input type="text" name="fullName" th:value="${user.fullName}" required />
+
+        <label>Alamat:</label>
+        <textarea name="address" required th:text="${user.address}"></textarea>
+
+        <label>Nomor HP:</label>
+        <input type="text" name="phone" th:value="${user.phone}" required />
+
+        <div class="form-button-wrapper">
+            <button type="submit">Simpan Perubahan</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
